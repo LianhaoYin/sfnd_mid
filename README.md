@@ -43,16 +43,18 @@ To start the variable of string dataPath in MidTermProject_Camera_student.cpp ne
 #### MP.1 Data Buffer Optimization
 
 Implement a vector for dataBuffer objects whose size does not exceed a limit (e.g. 2 elements). This can be achieved by pushing in new elements on one end and removing elements on the other end.
-
+```
 dataBuffer.push_back(frame);
 if(dataBuffer.size()>dataBufferSize)
 {
     dataBuffer.erase(dataBuffer.begin());
 }
+```
 
 #### MP.2 Keypoint Detection
 
 Implement detectors HARRIS, FAST, BRISK, ORB, AKAZE, and SIFT and make them selectable by setting a string accordingly.
+```
 detKeypointsModern(keypoints, imgGray, "HARRIS", true);
 cv::waitKey(0);
 detKeypointsModern(keypoints, imgGray, "FAST", true);
@@ -66,11 +68,11 @@ cv::waitKey(0);
 detKeypointsModern(keypoints, imgGray, "SIFT", true);
 cv::waitKey(0);
 
-
+```
 #### MP.3 Keypoint Removal
 
 Remove all keypoints outside of a pre-defined rectangle and only use the keypoints within the rectangle for further processing.
-
+```
 for (auto it = keypoints_cut.begin(); it != keypoints_cut.end(); ++it)
 {
     //cout << "keypoints x " << it->pt.x << " y is " << it->pt.y <<endl;
@@ -80,16 +82,17 @@ for (auto it = keypoints_cut.begin(); it != keypoints_cut.end(); ++it)
     }
     //std::cout <<"keypoints"<<it->pt.x<< it->pt.y<<endl;
 }
-
+```
 #### MP.4 Keypoint Descriptors
 
 Implement descriptors BRIEF, ORB, FREAK, AKAZE and SIFT and make them selectable by setting a string accordingly.
-
+```
 void descKeypoints()
-
+```
 #### MP.5 Descriptor Matching
 
 Implement FLANN matching as well as k-nearest neighbor selection. Both methods must be selectable using the respective strings in the main function.
+```
 
 else if (matcherType.compare("MAT_FLANN") == 0)
 {
@@ -107,10 +110,13 @@ else if (matcherType.compare("MAT_FLANN") == 0)
 else if (selectorType.compare("SEL_KNN") == 0)
 {
 }
+```
+
 
 #### MP.6 Descriptor Distance Ratio
 
 Use the K-Nearest-Neighbor matching to implement the descriptor distance ratio test, which looks at the ratio of best vs. second-best match to decide whether to keep an associated pair of keypoints.
+```
 
 double minDescDistRatio = 0.8;
 for (auto it = knn_matches.begin(); it != knn_matches.end(); ++it)
@@ -122,6 +128,8 @@ for (auto it = knn_matches.begin(); it != knn_matches.end(); ++it)
     }
     
 }
+```
+
 
 #### MP.7 Performance Evaluation 1
 
