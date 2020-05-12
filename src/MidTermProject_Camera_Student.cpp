@@ -24,8 +24,8 @@ int main(int argc, const char *argv[])
     /* INIT VARIABLES AND DATA STRUCTURES */
     
     // data location
-    string dataPath = "/Users/lianhao/OneDrive/CodePath/DL/sfnd_cam/SFND_featcher_matching/";
-    
+    string dataPath = "/Users/lianhao/OneDrive/CodePath/DL/submission/SFND_mid/";
+
     // camera
     string imgBasePath = dataPath + "images/";
     string imgPrefix = "KITTI/2011_09_26/image_00/data/000000"; // left camera, color
@@ -60,6 +60,8 @@ int main(int argc, const char *argv[])
     
     std::vector<double> time_all;
     std::vector<double> matchnr_all;
+    std::vector<double> keypoint_all;
+
     std::vector<string> des_result_all;
     std::vector<string> det_result_all;
     
@@ -111,12 +113,14 @@ int main(int argc, const char *argv[])
                 
                 
                 /* MAIN LOOP OVER ALL IMAGES */
-                double time_log = (double)cv::getTickCount(); // start time counting
+                //double time_log = (double)cv::getTickCount(); // start time counting
                 
                 
                 
                 for (size_t imgIndex = 0; imgIndex <= imgEndIndex - imgStartIndex; imgIndex++)
                 {
+                    double time_log = (double)cv::getTickCount(); // start time counting
+
                     /* LOAD IMAGE INTO BUFFER */
                     
                     // assemble filenames for current index
@@ -259,7 +263,7 @@ int main(int argc, const char *argv[])
                         
                         vector<cv::DMatch> matches;
                         //string matcherType = "MAT_FLANN";        // MAT_BF, MAT_FLANN
-                        string descriptorType = "DES_HOG"; // DES_BINARY, DES_HOG
+                        string descriptorType_2 = "DES_HOG"; // DES_BINARY, DES_HOG
                         string selectorType = "SEL_KNN";       // SEL_NN, SEL_KNN
                         
                         //// STUDENT ASSIGNMENT
@@ -279,7 +283,7 @@ int main(int argc, const char *argv[])
                             
                             matchDescriptors((dataBuffer.end() - 2)->keypoints, (dataBuffer.end() - 1)->keypoints,
                                              (dataBuffer.end() - 2)->descriptors, (dataBuffer.end() - 1)->descriptors,
-                                             matches, descriptorType, matcherType, selectorType);
+                                             matches, descriptorType_2, matcherType, selectorType);
                         }
                         
                         
@@ -308,18 +312,24 @@ int main(int argc, const char *argv[])
                             //cv::waitKey(0); // wait for key to be pressed
                         }
                         bVis = false;
+                        time_log = ((double)cv::getTickCount() - time_log) / cv::getTickFrequency(); // end time counting
+                        
+                        time_all.push_back(time_log);
+                        matchnr_all.push_back(matches.size());
+                        keypoint_all.push_back(keypoints.size());
+                        det_result_all.push_back(detectorType);
+                        des_result_all.push_back(descriptorType);
+                        
                     }
-                    
-                    
-                    
+                       
                     
                 } // eof loop over all images
                 std::cout<<"*************************finished*************************" <<endl;
                 
                 
-                time_log = ((double)cv::getTickCount() - time_log) / cv::getTickFrequency(); // end time counting
+                //time_log = ((double)cv::getTickCount() - time_log) / cv::getTickFrequency(); // end time counting
                 
-                std::cout<<"total time is " << time_log <<endl;
+                //std::cout<<"total time is " << time_log <<endl;
                 
                 float average_samplelog = 0.0f;
                 if ( sample_log.size() != 0)
@@ -334,19 +344,19 @@ int main(int argc, const char *argv[])
                 std::cout<<"average keypoint number is " << average_samplelog <<endl;
                 
                 
-                time_all.push_back(time_log);
-                matchnr_all.push_back(average_samplelog);
-                det_result_all.push_back(detectorType);
-                des_result_all.push_back(descriptorType);
+                //time_all.push_back(time_log);
+                //matchnr_all.push_back(average_samplelog);
+                //det_result_all.push_back(detectorType);
+                //des_result_all.push_back(descriptorType);
                 
                 cout<<".............................................................."<<endl;
                 cout<<".............................................................."<<endl;
                 cout<<".............................................................."<<endl;
                 cout<<"................................results  ....................."<<endl;
 
-                std::cout<<"itme i time " << time_log << " sample " <<average_samplelog << " det " << detectorType<< " des " <<descriptorType <<endl;
-                cout<<".............................................................."<<endl;
-                cout<<".............................................................."<<endl;
+                //std::cout<<"itme i time " << time_log << " sample " <<average_samplelog << " det " << detectorType<< " des " <<descriptorType <<endl;
+                //cout<<".............................................................."<<endl;
+                //cout<<".............................................................."<<endl;
                 
                 
             } catch (int e) {
@@ -356,7 +366,7 @@ int main(int argc, const char *argv[])
     }
     for(int i = 0; i <time_all.size();i++)
     {
-        std::cout<<"itme i time " << time_all[i] << " sample " <<matchnr_all[i] << " det " << det_result_all[i]<< " des " <<des_result_all[i] <<endl;
+        std::cout<<"case, time: " << time_all[i] << " match: " <<matchnr_all[i] << "keypoint: " <<keypoint_all[i]<<" det: " << det_result_all[i]<< " des: " <<des_result_all[i] <<endl;
     }
     return 0;
 }
